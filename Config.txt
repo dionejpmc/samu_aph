@@ -1,3 +1,5 @@
+Sistema de gestão de fichas APH - relatórios gráficos Wamp Server(Mysql + apache) + ZendFramework-1.12.16 + Twitter bootstrap-3.2.0 + Chart.js
+
 Projeto executado em Zend Framework
 Base de dados na raiz (samu_aph.sql)
 wamp server 64
