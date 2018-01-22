@@ -1,0 +1,131 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+  <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+  <link href="<?php echo $this->baseUrl() . '/css/estilotabelaconsulta.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+  <script src="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/js/bootstrap.js'; ?>"></script>
+
+   <script src="<?php echo $this->baseUrl() . '/Bootstrap-Confirm-Delete-master/bootstrap-confirm-delete.js'; ?>"
+
+  ></script>
+ <link href="<?php echo $this->baseUrl() . '/Bootstrap-Confirm-Delete-master/bootstrap-confirm-delete.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title></title>
+</head>
+<body>
+ <div class="navbar-wrapper">
+    <div class="container-fixed">
+      <nav class="navbar-inverse">
+        <div class="container">
+            <a class="navbar-brand " <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+<div class="container-fixed divcss">
+    <fieldset>
+    	<legend>Consulta tipo de ocorrência</legend>
+        <div class="table-responsive">
+          	<table class="tableviaturas table table-hover">
+	            <thead>
+	              <tr >
+	                <th >Cód.</th>
+                  <th >Data</th>
+	                <th >Colonizado</th>
+	                <th >Óbito</th>
+                  <th >Achados</th>
+                  <th >Status</th>
+                  <th >Usuário</th>
+                  <th >Opções</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              <?php 
+	                foreach ($this->fichaaph as $key => $valueficha) {
+	                  echo "<tr><td class='id'>";
+	                  echo  $valueficha['codigo'];
+	                  echo "</td>";
+	                  echo "<td class='data'>";
+	                  echo  $valueficha['data'];
+                    echo "</td>";
+                    echo "<td class='colonizado'>";
+                    if ($valueficha['colonizado'] == 0) {
+                        echo 'NÃO';
+                    }else{
+                        echo 'SIM';
+                    }
+                    echo "</td>";
+                    echo "<td class='obito'>";
+                    if ($valueficha['obito'] == 1) {
+                      echo 'NÃO' ;
+                    }elseif ($valueficha['obito']==2) {
+                      echo  'SIM[LOCAL]';
+                    }else{
+                      echo 'SIM[TRANSPORTE]' ;
+                    }
+                    echo "</td>";
+                    echo "<td class='achado'>";
+                    echo  $valueficha['achado'];
+                    echo "</td>";
+                      echo "<td class='status'>";
+                    if ($valueficha['status'] == 1) {
+                      echo "Ativo";
+                    }elseif ($valueficha['status'] == 0) {
+                      echo "Inativo";
+                    }
+                    echo "</td>";
+                    echo "<td class='user'>";
+                    $nome = explode(",",$valueficha['user']);
+                    echo  $nome[0];
+                    echo "</td>";
+	                  echo "<td class='tdbtn'>";
+	                  echo "<button class='btn-excluir'><span><i class='glyphicon glyphicon-trash'></i></span></button><button class='btn-editar ' data-toggle='modal' data-target='.bs-example-modal-lg-natureza'> <span><i class='glyphicon glyphicon-pencil'></i></span></button>" ;
+	                  echo "</td> </tr>";
+	                }
+	               ?>
+	            </tbody>
+        	</table> 
+   		</div>
+    	<h5 id="avisotable">( * ) Excluir apenas tornará ele inativo no sistema!</h5>
+    </fieldset>
+</div><!-- /.container div -->
+    <script type="text/javascript">   
+        $(document).on("click", ".btn-excluir", function(){
+          var codficha = $(this).parent().parent().find(".id").text();    
+          $( '.btn-excluir' ).bootstrap_confirm_delete(
+              {
+                  debug:              false,
+                  heading:            'Atenção!',
+                  message:            'Tem certeza que deseja desativar esta ficha?',
+                  btn_ok_label:       'Yes',
+                  btn_cancel_label:   'Cancel',
+                  data_type:          'post',
+                  callback:           function ( event )
+                                      {
+                                          // grab original clicked delete button 
+                                          var button = event.data.originalObject;
+                                          // execute delete operation 
+                                          button.closest( 'tr' ).remove();
+                                      },
+                  delete_callback:    function() { 
+                      window.location.replace("<?php echo $this->baseUrl() . '/fichaaph/excluirfichaaph?codficha='; ?>"+codficha);
+                   },
+                  cancel_callback:    function() {  }
+              }
+          );
+
+        } );
+  </script>
+
+  <script type="text/javascript">
+    $(document).on("click", ".btn-editar", function(){
+       alert('Edição não permitida!');
+    
+    });
+  </script>
+</body>
+</html>

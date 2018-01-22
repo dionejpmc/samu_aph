@@ -1,0 +1,30 @@
+.navbar-wrapper{
+	padding-top: 0.1%;
+}
+.nav-cog{
+	float: right;
+	right: 2%;
+	padding-right: 2%;
+}
+.bs-example-modal-lg-caduser{
+	right: 10%;
+}
+.contcaduser{
+	width: 95%;
+	height: 95%;
+}
+.bs-example-modal-lg-edituser{
+	right: 10%;
+}
+.status{
+	font-weight:bold;
+
+}
+#avisotable{
+	color:#007bff;
+}
+.configform{
+	padding-left: 45%;
+	padding-top: 5%;
+}
+	

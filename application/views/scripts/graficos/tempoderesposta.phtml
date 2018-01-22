@@ -1,0 +1,132 @@
+
+<html>
+	<head>
+		<title>Tabela tempo de resposta</title>
+	    <meta charset="utf-8">
+        <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+        <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+        <link href="<?php echo $this->baseUrl() . '/css/temporesposta.css'; ?>" rel="stylesheet" type="text/css" />
+        <?php
+            error_reporting(E_NOTICE);
+            ini_set('display_errors', 0 );
+            date_default_timezone_set('America/Sao_Paulo');
+        ?>
+    </head>
+</head>
+<body>
+	<div class="container-fixed">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+            </div>
+        </nav>
+    </div>
+    <?php 
+        foreach ($this->periodo as $key => $valuerange) {
+            $range01 = $valuerange['range01'];
+            $range02 = $valuerange['range02'];
+        }
+    ?>
+	<div class="table-responsive">
+		<fieldset>
+			<legend>Tabela tempo de resposta ( <?php echo $range01; ?> até <?php echo $range02; ?>)</legend>
+		<table class="table table-condensed table-hover">
+		  <thead>
+		    <tr>
+		      <th>Cód. ficha</th>
+		      <th>Data</th>
+		      <th>Viatura</th>
+		      <th>Saída (A)</th>
+		      <th>Chegada local (B)</th>
+		      <th>Saída local (C)</th>
+		      <th>Chegada final (D)</th>
+		      <th>Tempo: A>B</th>
+		      <th>Tempo: B>C </th>
+		      <th>Tempo: C>D </th>
+		      <th>Tempo: B>D </th>
+		      <th>Tempo: A>D </th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  <?php 
+		  		$count = 0;
+		  		$h   = 0;
+		  		$min = 0;
+		  		$s   = 0;
+		  		foreach ($this->dadosficha as $key => $value) {
+		  			$count +=1;
+			  		echo "<tr><td class='cod'>";
+			  		echo  $value['codigo'];
+	                echo "</td>";
+	                echo "<td class='data'>";
+			  		echo  $value['data'];
+	                echo "</td>";
+	                echo "<td class='data'>";
+			  		echo  $value['idviatura'];
+	                echo "</td>";
+	                echo "<td class='hsaida'>";
+			  		echo  $value['hsaida'];
+	                echo "</td>";
+	                echo "<td class='hchegadalocal'>";
+			  		echo  $value['hchegadalocal'];
+	                echo "</td>";
+	                echo "<td class='hsaidalocal'>";
+			  		echo  $value['hsaidalocal'];
+	                echo "</td>";
+	                echo "<td class='hchegadafinal'>";
+			  		echo  $value['hchegadafinal'];
+	                echo "</td>";
+	                echo "<td class='diff01'>";
+			  		$date1=new DateTime($value['hsaida']);
+            		$date2=new DateTime($value['hchegadalocal']);
+            		$diff=date_diff($date1,$date2);
+            		$interval = $date1->diff($date2);
+            		echo $interval->format("%R %H:%I:%S");
+	                echo "</td>";
+	                echo "<td class='diff02'>";
+			  		$date2=new DateTime($value['hchegadalocal']);
+            		$date3=new DateTime($value['hsaidalocal']);
+            		$diff=date_diff($date2,$date3);
+            		$interval = $date2->diff($date3);
+            		echo $interval->format("%R %H:%I:%S");
+	                echo "</td>";
+	                echo "<td class='diff03'>";
+			  		$date3=new DateTime($value['hsaidalocal']);
+            		$date4=new DateTime($value['hchegadafinal']);
+            		$diff=date_diff($date3,$date4);
+            		$interval = $date3->diff($date4);
+            		echo $interval->format("%R %H:%I:%S");
+	                echo "</td>";
+	                echo "<td class='diff04'>";
+			  		$date4=new DateTime($value['hchegadalocal']);
+            		$date5=new DateTime($value['hchegadafinal']);
+            		$diff=date_diff($date4,$date5);
+            		$interval = $date4->diff($date5);
+            		echo $interval->format("%R %H:%I:%S");
+	                echo "</td>";
+	                echo "<td class='diff05'>";
+			  		$date5=new DateTime( $value['hsaida']);
+            		$date6=new DateTime( $value['hchegadafinal']);
+            		$diff=date_diff($date5,$date6);
+            		$interval = $date5->diff($date6);
+			  		$h   += $interval->h;
+			  		$min += $interval->i;
+			  		$s   += $interval->s;
+            		echo $interval->format("%R %H:%I:%S");
+	                echo "</td> </tr>";
+                }
+		  ?>
+		  </tbody>
+		</table>
+		<?php 
+			$total = (($h * 60)* 60) + ($min*60) + ($s);
+			$media = $total / $count;
+		?>
+		<h2>Total ocorrências: <?php echo " " . $count; ?></h2>
+		<h2>Total tempo: <?php echo gmdate(" H:i:s", $total); ?></h2>
+		<h2>Média tempo: <?php echo gmdate(" H:i:s", $media); ?></h2>
+		( * ) Os tempos devem ser cadastrados corretamente no sistema, atenção com os dados de cadastro da ficha APH.
+		</fieldset>
+	</div>
+</body>
+</html>

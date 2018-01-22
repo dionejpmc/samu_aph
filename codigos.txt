@@ -1,0 +1,117 @@
+<?php $i=0; foreach ($this->dadosficha as $key => $value) { ?>
+    <label>Dados</label><br> <?php  echo $i; ?><br>
+    <label><?php echo $value['data'];  ?></label>
+        <label>
+        <?php 
+          $i+=1;
+            $date1=new DateTime($value['hsaida']);
+            $date2=new DateTime($value['hchegadafinal']);
+            $diff=date_diff($date1,$date2);
+
+            $interval = $date1->diff($date2);
+            echo $interval->format("%R %H:%I:%S");
+
+       
+            ?>
+        </label>
+
+       
+        <!--
+      buttons: {
+      "Are you sure": function() {
+      window.location = "<?php //echo //$this->url('delete', array('action'=>'delete', 'id' => $articles->getId())) ?>"
+      $( this ).dialog( "close" );
+      },
+      Cancel: function() {
+      $( this ).dialog( "close" );
+      }
+      }
+      !-->                        
+<?php  } ?> 
+
+   $this->_redirect(
+            //'/controller/action',
+           // array('param1' => 'value1', 'param2' => 'value2')
+            //);
+
+
+<script>
+        // Define a plugin to provide data labels
+        Chart.plugins.register({
+            afterDatasetsDraw: function(chart, easing) {
+                // To only draw at the end of animation, check for easing === 1
+                var ctx = chart.ctx;
+
+                chart.data.datasets.forEach(function (dataset, i) {
+                    var meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach(function(element, index) {
+                            // Draw the text in black, with the specified font
+                            ctx.fillStyle = 'rgb(0, 0, 0)';
+
+                            var fontSize = 16;
+                            var fontStyle = 'normal';
+                            var fontFamily = 'Helvetica Neue';
+                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+                            // Just naively convert to string for now
+                            var dataString = dataset.data[index].toString();
+
+                            // Make sure alignment settings are correct
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+
+                            var padding = 5;
+                            var position = element.tooltipPosition();
+                            ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+                        });
+                    }
+                });
+            }
+        });
+
+    </script>
+
+
+
+ <link href= "<?php echo $this->baseUrl() .'/selectator-master/selectator-master/fm.selectator.jquery.css' ;?>"rel="stylesheet" media="screen">
+                <style>
+                    #select4 {
+                        width: 350px;
+                        height: 36px;
+                    }       
+                </style>
+                <link href= "<?php echo $this->baseUrl() .'/selectator-master/selectator-master/fm.selectator.jquery.css' ;?>"rel="stylesheet" media="screen">
+                <div class=" form-group ">
+                    <label class="control-label">Achados</label>
+                        <div id="wrapper col-xs-4">
+                            
+                            <select id="select4" class="col-xs-4 form-control" name="select4" multiple>
+                                <?php foreach ($this->achado as $key => $value): ?>
+                                <option  id="<?php echo ($value['id']); ?>" value="<?php echo ($value['descricao']); ?>" ><?php echo ($value['descricao']); ?></option>
+                                <?php endforeach ?>
+
+                            </select>
+                            <input style="display:none" value="activate selectator" id="activate_selectator4" type="text">
+                        </div>
+                </div>
+                <script src="<?php echo $this->baseUrl() . '/selectator-master/selectator-master/jquery-1.11.0.min.js';?>"></script>
+                <script src="<?php echo $this->baseUrl() . '/selectator-master/selectator-master/fm.selectator.jquery.js';?>"></script>
+                <script>
+                        $(function () {
+                            var $activate_selectator4 = $('#activate_selectator4');
+                            $activate_selectator4.click(function () {
+                                var $select4 = $('#select4');
+                                if ($select4.data('selectator') === undefined) {
+                                    $select4.selectator({
+                                        showAllOptionsOnFocus: false
+                                    });
+                                    $activate_selectator4.val('destroy selectator');
+                                } else {
+                                    $select4.selectator('destroy');
+                                    $activate_selectator4.val('activate selectator');
+                                }
+                            });
+                            $activate_selectator4.trigger('click');
+                        });
+                </script>

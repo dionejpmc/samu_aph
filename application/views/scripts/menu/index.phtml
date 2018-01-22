@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+    <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+    <link href="<?php echo $this->baseUrl() . '/css/estilomenu.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+    <script src="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/js/bootstrap.js'; ?>"></script>
+    <script src="<?php echo $this->baseUrl() . '/Bootstrap-Confirm-Delete-master/bootstrap-confirm-delete.js'; ?>"
+    ></script>
+    <link href="<?php echo $this->baseUrl() . '/Bootstrap-Confirm-Delete-master/bootstrap-confirm-delete.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="<?php echo $this->baseUrl() . '/css/font-awesome.min.css'; ?>">
+    <link href= "<?php echo $this->baseUrl() .'/datetimepicker/bootstrap/css/bootstrap.min.css' ;?>" rel="stylesheet" media="screen">
+    <link href="<?php echo $this->baseUrl() .'/datetimepicker/css/bootstrap-datetimepicker.min.css'; ?>" rel="stylesheet" media="screen">
+    <script src="<?php echo $this->baseUrl() . '/datetimepicker/js/bootstrap-datetimepicker.js';?>"></script>
+    <script src="<?php echo $this->baseUrl() . '/datetimepicker/js/locales/bootstrap-datetimepicker.fr.js'; ?>"></script>
+    <link href="<?php echo $this->baseUrl() .'/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css'; ?>" rel="stylesheet" media="screen">
+    <script src="<?php echo $this->baseUrl() . '/bootstrap-datetimepicker-0.0.11/js/bootstrap-datetimepicker.min.js';?>"></script>
+    <title>Menu</title>
+    <?php
+    error_reporting(E_NOTICE);
+    ini_set('display_errors', 0 );
+    date_default_timezone_set('America/Sao_Paulo');
+    ?>
+  </head>
+  <body>
+    <?php foreach ($this->configdata as $key => $value) {
+    $dataconfig01 = $value['range01'];
+    $dataconfig02 = $value['range02'];
+    } ?>
+    <div class="navbar-wrapper">
+      <div class="container-fixed">
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Menu</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">SAMU APH</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="glyphicon glyphicon-plus-sign"></span></a>
+                   <?php if ($this->usertype == 1): ?>
+                  <ul class="dropdown-menu">
+                    <li><a data-toggle='modal' data-target='.bs-example-modal-lg-cadviatura'><code>Viaturas</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a data-toggle='modal' data-target='.bs-example-modal-lg-origemdestino'><code>Origem e Destino</code></a></li>
+                    <!--<li role="separator" class="divider"></li>
+                    <li><a data-toggle='modal' data-target='.bs-example-modal-lg-cadtipoocorrencia'><code>Tipo Ocorrência</code></a></li>!-->
+                    <li role="separator" class="divider"></li>
+                    <li><a data-toggle='modal' data-target='.bs-example-modal-lg-cadnatureza'><code>Natureza Ocorrência</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a data-toggle='modal' data-target='.bs-example-modal-lg-cadachado'><code>Achado</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a data-toggle='modal' data-target='.bs-example-modal-lg-cadbairro'><code>Bairro</code></a></li>
+                    <?php endif ?>
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Consultas <span class="glyphicon glyphicon-search"></span></a>
+                  <?php if ($this->usertype == 1): ?>
+                  <ul class="dropdown-menu">
+                    <li><a href="<?php echo $this->baseUrl() .'/menu/consultarviaturas';?>"><code>Viaturas</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/menu/consultarordes'; ?>"><code>Origem e Destino</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <!--<li><a href="<?php //echo $this->baseUrl() . '/menu/consultartipoocorrencia'; ?>"><code>Tipo Ocorrência</code></a></li>
+                    <li role="separator" class="divider"></li>!-->
+                    <li><a href="<?php echo $this->baseUrl() . '/menu/consultarachado'; ?>"><code>Achado</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/menu/consultarnatureza'; ?>"><code>Natureza Ocorrência</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/menu/consultarbairro'; ?>"><code>Consultar bairro</code></a></li>
+                  </ul>
+                  <?php endif ?>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gráficos <span class="glyphicon glyphicon-stats"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="<?php echo $this->baseUrl() .'/graficos/ocorrenciaporsexo';?>"><code>Atendimentos por sexo</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/ocorrenciapormes'; ?>"><code>Atendimentos por mês</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/ocorrenciaportipo'; ?>"><code>Atendimentos por tipo</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/ocorrenciapornatureza'; ?>"><code>Atendimentos por natureza</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/ocorrenciaporidade'; ?>"><code>Atendimentos por faixa etária</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/atendimentoporviatura'; ?>"><code>Atendimento por viaturas</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/tempoderesposta'; ?>"><code>Tabela tempo de resposta</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/atendimentoporbairro'; ?>"><code>Tabela atendimento por bairro</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/atendimentopororigem'; ?>"><code>Tabela atendimento por origem</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/atendimentopordestino'; ?>"><code>Tabela atendimento por destino</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() . '/graficos/achadosclinicos'; ?>"><code>Tabela achados clínicos</code></a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="<?php echo $this->baseUrl() . '/menu/abrirocorrencia?msg'; ?>" role="button" aria-haspopup="true" aria-expanded="false">Abrir Ocorrência <span class="glyphicon glyphicon-road"></span></a>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav session">
+                <li class="dropdown">
+                  <a class="btn01" href="#" role="button" aria-haspopup="true" aria-expanded="false">Olá : <?php echo $this->user; ?> <span class="glyphicon"></span></a>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav nav-cog">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Configurações <span class="glyphicon glyphicon-cog"></span></a>
+                  <ul class="dropdown-menu">
+                    <?php if ($this->usertype == 1): ?>
+                    <li><a href="#newuser" data-toggle="modal" data-target=".bs-example-modal-lg-caduser"><code>Novo usuário</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#edituser" data-toggle="modal" data-target=".bs-example-modal-lg-edituser"><code>Editar usuário</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#edituser" data-toggle="modal" data-target=".bs-example-modal-lg-parametro"><code>Parametro</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <?php endif ?>
+                    <li><a data-toggle='modal' data-target='.bs-example-modal-lg-editpasswd' href=""><code>Alterar senha</code></a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<?php echo $this->baseUrl() .'/auth/logout';?>"><code>Sair</code></a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <?php if ($_GET['msg'] != "" || $_GET['msg'] != '') { ?>
+    <div class="alert alert-success alert-dismissable" id="successMessage">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Mensagem!</strong> <?php echo $_GET['msg']; ?>
+    </div>
+    <?php  } ?>
+    <div class="imglogo">
+      <img class="img col-md-4 col-xs-4 col-sm-4" >
+      <img class="img col-md-4 col-xs-4 col-sm-4" src="./img/logosamu.jpg" alt="">
+      <img class="img col-md-4 col-xs-4 col-sm-4" >
+    </div>
+    <script type="text/javascript">
+    $('#successMessage').delay(5000).fadeOut('slow');
+    </script>
+    <div class="modal fade bs-example-modal-lg-caduser mod" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg mod">
+        <div class="modal-content mod desc">
+          <div class="container contcaduser">
+            <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'cadastrarusuario'), null, true); ?> " method="post"  id="contact_form">
+              <fieldset>
+                <legend>Cadastro de usuário</legend>
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Primeiro Nome</label>
+                  <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                      <input required  name="name"  class="form-control"  type="text">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Alias</label>
+                  <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                      <input   name="user" minlength="3" required class="form-control" type="text">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Senha</label>
+                  <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                      <input required minlength="5" name="password" class="form-control" type="text">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Tipo</label>
+                  <div class="col-md-4 selectContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                      <select style='text-transform:uppercase' required name="tipo" class="form-control selectpicker" >
+                        <option  value=""></option>
+                        <option  value="1">Administrador</option>
+                        <option  value="2">Comum</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-4 control-label"></label>
+                  <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+          </div><!-- /.container -->
+        </div>
+        </div><!-- /.fecha -->
+      </div>
+      <div class="modal fade bs-example-modal-lg-edituser mod" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg mod">
+          <div class="modal-content mod desc container">
+            <div class="edituser table-responsive">
+              <table class="tableedituser table table-hover">
+                <thead>
+                  <tr >
+                    <th >Id</th>
+                    <th >Nome</th>
+                    <th >Alias</th>
+                    <th >Tipo</th>
+                    <th >Status</th>
+                    <th >Opções</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  foreach ($this->users as $key => $value) {
+                  echo "<tr><td class='id'>";
+                    echo  $value['id'];
+                  echo "</td>";
+                  echo "<td class='nome'>";
+                    echo  $value['nome'];
+                  echo "</td>";
+                  echo "<td class='alias'>";
+                    echo $value['user'];
+                  echo "</td>";
+                  echo "<td class='tipo'>";
+                    if ($value['tipo'] == 1) {
+                    echo  "Administrador";
+                    }elseif ($value['tipo'] == 2) {
+                    echo  "Comum";
+                    }
+                  echo "</td>";
+                  echo "<td class='status'>";
+                    if ($value['status'] == 1) {
+                    echo "Ativo";
+                    }elseif ($value['status'] == 0) {
+                    echo "Inativo";
+                    }
+                  echo "</td>";
+                  echo "<td class='tdbtn'>";
+                    echo "<button class='btn-excluir'><span><i class='glyphicon glyphicon-trash'></i></span></button><button class='btn-editar ' data-toggle='modal' data-target='.bs-example-modal-lg-editusertable'> <span><i class='glyphicon glyphicon-pencil'></i></span></button>" ;
+                  echo "</td> </tr>";
+                  }
+                  ?>
+                </tbody>
+              </table>
+            </div>
+            <h5 id="avisotable">Excluir um usuário apenas tornará ele inativo no sistema!</h5>
+            </div><!-- /.container -->
+          </div>
+          </div><!-- /.fecha -->
+        </div>
+        <div class="modal fade bs-example-modal-lg-editusertable mod" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg mod">
+            <div class="modal-content mod desc">
+              <div class="container contcaduser">
+                <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'editarusuario'), null, true); ?>" method="post"  id="contact_form">
+                  <fieldset>
+                    <!-- Form Name -->
+                    <legend>Editar usuário</legend>
+                    <!-- Text input-->
+                    <div class="form-group">
+                      <label class="col-md-4 control-label">Tipo</label>
+                      <div class="col-md-4 selectContainer">
+                        <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                          <select style='text-transform:uppercase' required  name="tipo" class="form-control selectpicker" >
+                            <option  value=""></option>
+                            <option  value="1">Administrador</option>
+                            <option  value="2">Comum</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                        <label class="col-md-4 control-label">Nova Senha</label>
+                        <div class="col-md-4">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input required minlength="5" name="passwd" placeholder="Senha" class="form-control" type="password" >
+                          </div>
+                        </div>
+                      
+                 
+                    <input name="idP" id="idP"  type="text" style="display: none;">                    
+                  </fieldset>
+                  <div class="form-group configform col-xs-12">
+                      <label class="col-md-12 col-xs-12 control-label"></label>
+                      <div class="col-md-12 col-xs-12">
+                        <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                      </div>
+                  </div>
+                </form>
+              </div>
+              </div><!-- /.container -->
+            </div>
+          </div>
+        </div>
+        <div class="modal fade bs-example-modal-lg-parametro mod" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg mod">
+            <div class="modal-content mod desc">
+              <div class="container contcaduser">
+                <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'salvarconfiguracoes'), null, true); ?>" method="post"  id="contact_form">
+                  <fieldset>
+                    <legend>Editar parâmetros de pesquisa (filtro de dados)</legend>
+                    <div class="form-group">
+                      <div  class="col-xs-4">
+                        <label for="range01" class="control-label">Data inicial: <?php echo $dataconfig01;?></label>
+                        <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="range01" data-link-format="yyyy-mm-dd">
+                          <input  readonly  class="form-control" size="10" type="text" value="">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        </div>
+                        <input  type="hidden" name="range01" id="range01" value="" />
+                      </div>
+                      <div  class="col-xs-4">
+                        <label for="range02" class="control-label">Data Final: <?php echo $dataconfig02;?></label>
+                        <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="range02" data-link-format="yyyy-mm-dd">
+                          <input readonly  class="form-control" size="10" type="text" value="" >
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        </div>
+                        <input  type="hidden" name="range02" id="range02" value="" />
+                      </div>
+                      <div  class="col-xs-4">
+                      </div>
+                      <!-- Button -->
+                      <div class="form-group configform col-xs-12">
+                        <div class="col-xs-12">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
+              </div><!-- /.container -->
+            </div>
+          </div>
+          <div class="modal fade bs-example-modal-lg-editpasswd mod" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg mod">
+              <div class="modal-content mod desc">
+                <div class="container contcaduser">
+                  <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'alterarsenha'), null, true); ?>" method="post"  id="contact_form">
+                    <fieldset>
+                      <!-- Form Name -->
+                      <legend>Editar usuário <?php echo ": " . $this->loguser ?></legend>
+                      <!-- Text input-->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Nova Senha</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input required minlength="5" name="senha02" placeholder="Senha" class="form-control" type="password" >
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Button -->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                      <input required name="aliasuser" style="display: none;" type="text" value="<?php echo $this->loguser ?>" >
+                      <input required name="passwd02" style="display: none;" type="text" value="<?php echo $this->userid ?>" >
+                    </fieldset>
+                  </form>
+                </div>
+                </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+          <div class="modal fade bs-example-modal-lg-cadviatura mod" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg mod">
+              <div class="modal-content mod desc">
+                <div class="container contcaduser">
+                  <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'cadastroviatura'), null, true); ?>" method="post"  id="contact_form">
+                    <fieldset>
+                      <!-- Form Name -->
+                      <legend>Cadastro de viatura</legend>
+                      <!-- Text input-->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Descrição da unidade móvel</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+                            <input style='text-transform:uppercase' required minlength="3" name="descviatura" class="form-control" type="text" >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Tipo</label>
+                        <div class="col-md-4 selectContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                            <select required  name="tipoviatura" class="form-control selectpicker" >
+                              <option  value=""></option>
+                              <option  value="MOTO">Moto</option>
+                              <option  value="CARRO">Carro</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <!-- Button -->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+          <div class="modal fade bs-example-modal-lg-cadtipoocorrencia mod" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg mod">
+              <div class="modal-content mod desc">
+                <div class="container contcaduser">
+                  <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'cadastrotipoocorrencia'), null, true); ?>" method="post"  id="contact_form">
+                    <fieldset>
+                      <!-- Form Name -->
+                      <legend>Tipo de ocorrência</legend>
+                      <!-- Text input-->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Descrição do tipo</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+                            <input style='text-transform:uppercase' required minlength="3" name="descocorrencia" placeholder="" class="form-control" type="text" >
+                          </div>
+                        </div>
+                      </div><br>
+                      <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+          <div class="modal fade bs-example-modal-lg-cadachado mod" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg mod">
+              <div class="modal-content mod desc">
+                <div class="container contcaduser">
+                  <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'cadastroachado'), null, true); ?>" method="post"  id="contact_form">
+                    <fieldset>
+                      <!-- Form Name -->
+                      <legend>Achados</legend>
+                      <!-- Text input-->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Descrição do achado</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+                            <input style='text-transform:uppercase' required minlength="3" name="descachado" placeholder="" class="form-control" type="text" >
+                          </div>
+                        </div>
+                      </div><br>
+                      <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+          <div class="modal fade bs-example-modal-lg-origemdestino mod" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg mod">
+              <div class="modal-content mod desc">
+                <div class="container contcaduser">
+                  <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'cadastroorigemdestino'), null, true); ?>" method="post"  id="contact_form">
+                    <fieldset>
+                      <!-- Form Name -->
+                      <legend>Origem e destino</legend>
+                      <!-- Text input-->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Descrição da origem ou destino</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+                            <input style='text-transform:uppercase' required minlength="3" name="inputorigemdestino"class="form-control" type="text" >
+                          </div>
+                        </div>
+                      </div><br>
+                      <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+          <div class="modal fade bs-example-modal-lg-cadnatureza mod" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg mod">
+              <div class="modal-content mod desc">
+                <div class="container contcaduser">
+                  <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'cadastronatureza'), null, true); ?>" method="post"  id="contact_form">
+                    <fieldset>
+                      <!-- Form Name -->
+                      <legend>Cadastro natureza da ocorrência</legend>
+                      <!-- Text input-->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Descrição da natureza</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+                            <input style='text-transform:uppercase' required minlength="3" name="inputnatureza"class="form-control" type="text" >
+                          </div>
+                        </div>
+                      </div><br>
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Tipo ocorrência</label>
+                        <div class="col-md-4 selectContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                            <select required  name="descnatureza" class="form-control selectpicker" >
+                              <option  value=""></option>
+                              <?php foreach ($this->datatipoocorrencia as $key => $value) {
+                              
+                              ?>
+                              <option  value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option>
+                              <?php  } ?>
+                            </select>
+                          </div>
+                        </div>
+                      </div><br>
+                      <!-- Button -->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+          <div class="modal fade bs-example-modal-lg-cadbairro mod" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg mod">
+              <div class="modal-content mod desc">
+                <div class="container contcaduser">
+                  <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'cadastrobairro'), null, true); ?>" method="post"  id="contact_form">
+                    <fieldset>
+                      <!-- Form Name -->
+                      <legend>Cadastro de bairro</legend>
+                      <!-- Text input-->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Bairro</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                            <input style='text-transform:uppercase' required minlength="3" name="inputbairro"class="form-control" type="text" >
+                          </div>
+                        </div>
+                      </div><br>
+                      <div class="form-group">
+                        <label class="col-md-4 control-label">Observação</label>
+                        <div class="col-md-4 inputGroupContainer">
+                          <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon  glyphicon-asterisk"></i></span>
+                            <input style='text-transform:uppercase' minlength="3" name="inputobsbairro"class="form-control" type="text" >
+                          </div>
+                        </div>
+                      </div><br>
+                      
+                      <!-- Button -->
+                      <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+                </div><!-- /.container -->
+              </div>
+            </div>
+          </div>
+          <input required name="loguser01" style="display: none;" type="text" value="<?php echo $this->loguser ?>" >
+          <input required name="userid01" style="display: none;" type="text" value="<?php echo $this->userid ?>" >
+          <input required name="usertype01" style="display: none;" type="text" value="<?php echo $this->usertype ?>" >
+          <script type="text/javascript">
+          $(document).on("click", ".btn-excluir", function(){
+          var idPessoa = $(this).parent().parent().find(".id").text();
+          $( '.btn-excluir' ).bootstrap_confirm_delete({
+          debug:              false,
+          heading:            'Atenção!',
+          message:            'Tem certeza que deseja desativar este usuário?',
+          btn_ok_label:       'Yes',
+          btn_cancel_label:   'Cancel',
+          data_type:          'post',
+          callback:           function ( event ) {
+          // grab original clicked delete button
+          var button = event.data.originalObject;
+          // execute delete operation
+          button.closest( 'tr' ).remove();
+          },
+          delete_callback:    function() {
+          window.location.replace("<?php echo $this->baseUrl() . '/menu/excluirusuario?idPessoa='; ?>"+idPessoa);
+          },
+          cancel_callback:    function() {  }
+          });
+          });
+          </script>
+          <script type="text/javascript">
+          $(document).on("click", ".btn-editar", function(){
+          var idPessoa = $(this).parent().parent().find(".id").text();
+          var tipoUsuario = $(this).parent().parent().find(".tipo").text();
+          $('#idP').val(idPessoa);
+          document.getElementById("idP").visibility = 'hidden';
+          });
+          </script>
+          <script type="text/javascript">
+          $('.form_date').datetimepicker({
+          language:  'pt-BR',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 2,
+          minView: 2,
+          forceParse: 0
+          });
+          $('.form_time').datetimepicker({
+          language:  'pt-BR',
+          weekStart: 1,
+          todayBtn:  1,
+          autoclose: 1,
+          todayHighlight: 1,
+          startView: 1,
+          minView: 0,
+          maxView: 1,
+          forceParse: 0
+          });
+          </script>
+        </body>
+      </html>

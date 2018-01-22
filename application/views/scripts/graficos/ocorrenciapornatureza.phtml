@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <title>Ocorrências por natureza</title>
+            <meta charset="utf-8">
+            <title>Ocorrência por natureza</title>
+            <script src="<?php echo $this->baseUrl() . '/Chart.js/Chart.js';?>"></script>
+            <script src="<?php echo $this->baseUrl() . '/Chart.js/samples/utils.js';?>"></script>
+            <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+            <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+            <?php
+                error_reporting(E_NOTICE);
+                ini_set('display_errors', 0 );
+                date_default_timezone_set('America/Sao_Paulo');
+            ?>
+    </head>
+<body>
+    <?php 
+        foreach ($this->periodo as $key => $valuerange) {
+            $range01 = $valuerange['range01'];
+            $range02 = $valuerange['range02'];
+        }
+    ?>
+    <?php 
+        $i = 0;
+        $total = 0;
+        foreach ($this->natureza as $key01 => $natureza) {
+            foreach ($this->countnatureza as $key02 => $fichanatureza) {
+                if ($natureza['id']==$fichanatureza['idnatureza']) {
+                    $array_data_label[]=  array( "descricao" =>  $natureza['descricao'], "qtde" =>$fichanatureza['qtde'] );
+                    $i = $i +1;
+                    $total = $total + $fichanatureza['qtde'];
+                }
+            }
+        }
+    ?>
+    <div class="container-fixed">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+            </div>
+        </nav>
+    </div>
+    <?php 
+        echo $array_data_label['descricao'];
+    ?>
+    <div style="width:90%;"><canvas id="myChart01" ></canvas></div>
+        <script>
+        var ctx = document.getElementById("myChart01").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                scaleShowLabels: false, 
+                scaleShowGridLines : false,
+                labels: [<?php 
+                            foreach ($array_data_label as $key => $value) {
+                                echo "'$value[descricao] : $value[qtde]' ";
+                                echo ",";
+                        } ?>],
+                datasets: [{
+                    label:"Percentual ( % )",
+                    data: [<?php 
+                            foreach ($array_data_label as $key => $value) {
+                                echo number_format((($value['qtde']/$total)*100), 2);
+                                echo ",";
+                        } ?>], 
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(215, 255, 0, 1)',
+                        'rgba(125, 125, 125, 1)',
+                        'rgba(218, 125, 125, 1)',
+                        'rgba(255, 0, 125, 1)',
+                        'rgba(0, 255, 255, 1)',
+                        'rgba(0, 125, 156, 1)',
+                        'rgba(0, 125, 1, 1)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(215, 255, 0, 1)',
+                        'rgba(125, 125, 125, 1)',
+                        'rgba(218, 125, 125, 1)',
+                        'rgba(255, 0, 125, 1)',
+                        'rgba(0, 255, 255, 1)',
+                        'rgba(0, 125, 156, 1)',
+                        'rgba(0, 125, 1, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    scaleShowLabels: false,
+                    scaleShowGridLines : false,
+                    text:"( % ) Percentual de ocorrências por natureza, no período de: " + "<?php  echo $range01;  ?>" + " a " + "<?php  echo $range02;  ?>"
+                },
+                scales: {
+                     xAxes: [{
+                        ticks: {
+                        }               
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                            steps: 5,
+                            stepSize: 5,
+                            max: 100
+                        },
+                    }]
+                }
+            }
+        });
+        </script>
+        <script>
+        // Define a plugin to provide data labels
+        Chart.plugins.register({
+            afterDatasetsDraw: function(chart, easing) {
+                // To only draw at the end of animation, check for easing === 1
+                var ctx = chart.ctx;
+                chart.data.datasets.forEach(function (dataset, i) {
+                    var meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach(function(element, index) {
+                            // Draw the text in black, with the specified font
+                            ctx.fillStyle = 'rgb(0, 0, 0)';
+                            var fontSize = 16;
+                            var fontStyle = 'normal';
+                            var fontFamily = 'Helvetica Neue';
+                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+                            // Just naively convert to string for now
+                            var dataString = dataset.data[index].toString();
+                            // Make sure alignment settings are correct
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            var padding = 5;
+                            var position = element.tooltipPosition();
+                            ctx.fillText(dataString + " %", position.x, position.y - (fontSize / 2) - padding);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

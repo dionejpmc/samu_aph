@@ -1,0 +1,164 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+  <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+  <link href="<?php echo $this->baseUrl() . '/css/estilotabelaconsulta.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+  <script src="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/js/bootstrap.js'; ?>"></script>
+
+   <script src="<?php echo $this->baseUrl() . '/Bootstrap-Confirm-Delete-master/bootstrap-confirm-delete.js'; ?>"
+
+  ></script>
+ <link href="<?php echo $this->baseUrl() . '/Bootstrap-Confirm-Delete-master/bootstrap-confirm-delete.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title></title>
+</head>
+<body>
+	<div class="navbar-wrapper">
+    <div class="container">
+      <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Menu</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+          </div>
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+<div class="container divcss">
+    <fieldset>
+    	<legend>Consulta tipo de ocorrência</legend>
+        <div class="table-responsive">
+          	<table class="tableviaturas table table-hover">
+	            <thead>
+	              <tr >
+	                <th >Id</th>
+	                <th >Descrição</th>
+	                <th >Status</th>
+	                <th >Opções</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              <?php 
+	                foreach ($this->datatipoocorrencia as $key => $value) {
+	                  echo "<tr><td class='id'>";
+	                  echo  $value['id'];
+	                  echo "</td>";
+	                  echo "<td class='nome'>";
+	                  echo  $value['descricao'];
+	                  echo "</td>";
+
+	                  echo "<td class='status'>";
+	                  if ($value['status'] == 1) {
+	                    echo "Ativo";
+	                  }elseif ($value['status'] == 0) {
+	                    echo "Inativo";
+	                  }
+	                  echo "</td>";
+	                  echo "<td class='tdbtn'>";
+	                  echo "<button class='btn-excluir'><span><i class='glyphicon glyphicon-trash'></i></span></button><button class='btn-editar ' data-toggle='modal' data-target='.bs-example-modal-lg-tipoocorrencia'> <span><i class='glyphicon glyphicon-pencil'></i></span></button>" ;
+	                  echo "</td> </tr>";
+	                }
+	               ?>
+	            </tbody>
+        	</table> 
+   		</div>
+    	<h5 id="avisotable">Excluir apenas tornará ele inativo no sistema!</h5>
+    </fieldset>
+</div><!-- /.container div -->
+
+
+  <div class="modal fade bs-example-modal-lg-tipoocorrencia mod" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg mod">
+      <div class="modal-content mod desc">
+        <div class="contcaduser">
+
+            <form class="well form-horizontal" action="<?php echo $this->url(array('controller' => 'menu', 'action' => 'editartipoocorrencia'), null, true); ?>" method="post"  id="contact_form">
+            <fieldset>
+              <!-- Form Name -->
+              <legend>Tipo de ocorrência</legend>
+              <!-- Text input-->
+              <div class="form-group">
+              <label class="col-md-4 control-label">Descrição do tipo</label>  
+               <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-ambulance"></i></span>
+              <input style='text-transform:uppercase' id="desctipo" required minlength="3" name="descocorrencia" class="form-control" type="text" >
+              <input name="idTipo" id="idTipo"  type="text" style="display: none;">
+                </div>
+              </div>
+            </div><br>
+            
+                <!-- Button -->
+                <div class="form-group">
+                  <label class="col-md-4 control-label"></label>
+                  <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary" >Salvar <span class="glyphicon glyphicon-send"></span></button>
+                  </div>
+                </div>
+                </fieldset>
+                </form>
+                </div>
+              </div><!-- /.container -->
+        </div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+   
+    $(document).on("click", ".btn-excluir", function(){
+      var idTipo = $(this).parent().parent().find(".id").text();    
+   
+    $( '.btn-excluir' ).bootstrap_confirm_delete(
+
+ 
+        {
+            debug:              false,
+            heading:            'Atenção!',
+            message:            'Tem certeza que deseja desativar este tipo?',
+            btn_ok_label:       'Yes',
+            btn_cancel_label:   'Cancel',
+            data_type:          'post',
+            callback:           function ( event )
+                                {
+                                    // grab original clicked delete button 
+                                    var button = event.data.originalObject;
+                                    // execute delete operation 
+                                    button.closest( 'tr' ).remove();
+                                },
+            delete_callback:    function() { 
+                window.location.replace("<?php echo $this->baseUrl() . '/menu/excluirtipoocorrencia?idTipo='; ?>"+idTipo);
+             },
+            cancel_callback:    function() {  }
+        }
+    );
+
+} );
+  </script>
+
+  <script type="text/javascript">
+    $(document).on("click", ".btn-editar", function(){
+      var idTipo = $(this).parent().parent().find(".id").text();
+      var idDesc = $(this).parent().parent().find(".nome").text();
+
+      $('#idTipo').val(idTipo);
+      document.getElementById("idTipo").value = idTipo;
+      document.getElementById("desctipo").value = idDesc; 
+      document.getElementById("idTipo").visibility = 'hidden';   
+    });
+  </script>
+
+
+</body>
+</html>

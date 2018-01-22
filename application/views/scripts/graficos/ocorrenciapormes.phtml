@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Bar Chart</title>
+    
+    <script src="<?php echo $this->baseUrl() . '/Chart.js/Chart.js';?>"></script>
+     <script src="<?php echo $this->baseUrl() . '/Chart.js/samples/utils.js';?>"></script>
+       <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+    <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+            <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+   <?php
+        error_reporting(E_NOTICE);
+        ini_set('display_errors', 0 );
+    ?>
+</head>
+<body>
+     <div class="container-fixed">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+            </div>
+        </nav>
+    </div>
+    <?php 
+        $jan = 0;
+        $fev = 0;
+        $mar = 0;
+        $abr = 0;
+        $mai = 0;
+        $jun = 0;
+        $jul = 0;
+        $ago = 0;
+        $set = 0;
+        $out = 0;
+        $nov = 0;
+        $dez = 0;
+        $total = 0;
+        foreach ($this->selectanual as $key => $value) {
+            $data = date($value['data']);
+            $partes = explode("-", $data);
+            $dia = $partes[2];
+            $mes = $partes[1];
+            $ano = $partes[0];
+            $total+=1;
+            if ($mes == 1) {
+                $jan +=1;
+            }elseif ($mes == 2) {
+                $fev +=1;
+            }elseif ($mes == 3) {
+                $mar +=1;
+            }elseif ($mes == 4) {
+                $abr +=1;
+            }elseif ($mes == 5) {
+                $mai +=1;
+            }elseif ($mes == 6) {
+                $jun +=1;
+            }elseif ($mes == 7) {
+                $jul +=1;
+            }elseif ($mes == 8) {
+                $ago +=1;
+            }elseif ($mes == 9) {
+                $set +=1;
+            }elseif ($mes == 10) {
+                $out +=1;
+            }elseif ($mes == 11) {
+                $nov +=1;
+            }elseif ($mes == 12) {
+                $dez +=1;
+            }
+            
+        }
+     ?>
+    <div style="width:80%;"><canvas id="myChart" ></canvas></div>
+
+       
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+
+    data: {
+        labels: ["Janeiro["+<?php echo $jan;?>+"]" ,"Fevereiro["+<?php echo $fev; ?>+"]","Março["+<?php echo $mar;  ?>+"]","Abril["+<?php echo $abr; ?>+"]","Maio["+<?php echo $mai; ?>+"]","Junho["+<?php echo $jun; ?>+"]","Julho["+<?php echo $jul;  ?>+"]","Agosto["+<?php echo $ago;  ?>+"]","Setembro["+<?php echo $set;  ?>+"]","Outubro["+<?php echo $out;  ?>+"]","Novembro["+<?php echo $nov; ?>+"]","Dezembro["+<?php echo $dez; ?>+"]"],
+        datasets: [{
+            label: "Ocorrências por mês no ano atual (" + <?php echo date('Y'); ?> + ")",
+            data: [<?php echo number_format(($jan/$total)*100,2); ?>,<?php echo number_format(($fev/$total)*100,2); ?>,<?php echo number_format(($mar/$total)*100,2); ?>,<?php echo number_format(($abr/$total)*100,2); ?>,<?php echo number_format(($mai/$total)*100,2); ?>,<?php echo number_format(($jun/$total)*100,2); ?>,<?php echo number_format(($jul/$total)*100,2); ?>,<?php echo number_format(($ago/$total)*100,2); ?>,<?php echo number_format(($set/$total)*100,2); ?>,<?php echo number_format(($out/$total)*100,2); ?>,<?php echo number_format(($nov/$total)*100,2); ?>,<?php echo number_format(($dez/$total)*100,2); ?> ],
+            backgroundColor:" rgba(215, 38, 13, 0.7)",
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'Dados de ocorrências por mês (0% a 100%)'
+        },
+        scales: {
+            xAxes: [{
+                responsive: true, 
+                datasetFill : false,
+                scaleOverride: true,
+                scaleShowGridLines : true,
+                scaleShowLabels: true
+               
+            }],
+            yAxes: [{
+               gridLines: {
+                    lineWidth: 2
+                },
+                ticks: {
+                beginAtZero:true, 
+                steps: 10,
+                stepSize: 10,
+                max: 100
+                }
+            }]
+        }
+    }
+});
+</script>
+
+ <script>
+        // Define a plugin to provide data labels
+        Chart.plugins.register({
+            afterDatasetsDraw: function(chart, easing) {
+                // To only draw at the end of animation, check for easing === 1
+                var ctx = chart.ctx;
+                chart.data.datasets.forEach(function (dataset, i) {
+                    var meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach(function(element, index) {
+                            // Draw the text in black, with the specified font
+                            ctx.fillStyle = 'rgb(0, 0, 0)';
+                            var fontSize = 16;
+                            var fontStyle = 'normal';
+                            var fontFamily = 'Helvetica Neue';
+                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+                            // Just naively convert to string for now
+                            var dataString = dataset.data[index].toString();
+                            // Make sure alignment settings are correct
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            var padding = 5;
+                            var position = element.tooltipPosition();
+                            ctx.fillText(dataString + " %" , position.x, position.y - (fontSize / 2) - padding);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

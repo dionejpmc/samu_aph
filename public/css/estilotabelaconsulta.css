@@ -1,0 +1,17 @@
+.divcss{
+
+	margin-top: 5px;
+	border-radius: 5px 5px 5px 5px;
+}
+legend{
+	text-align: center;
+}
+h5{
+	color: #5bb75b;
+}
+.navbar-wrapper{
+	margin-top: 5px;
+}
+body{
+	text-transform: uppercase;
+}

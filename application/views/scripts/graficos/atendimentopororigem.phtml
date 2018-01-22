@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Ocorrências por bairro</title>
+        <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+        <script src="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/js/bootstrap.js'; ?>"></script>
+        <?php
+            error_reporting(E_NOTICE);
+            ini_set('display_errors', 0 );
+        ?>
+    </head>
+<body>
+    <div class="container-fixed">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+            </div>
+        </nav>
+    </div>
+    <?php 
+        foreach ($this->periodo as $key => $valuerange) {
+            $range01 = $valuerange['range01'];
+            $range02 = $valuerange['range02'];
+        }
+    ?>
+    <?php 
+        $i = 0;
+        $total = 0;
+        foreach ($this->origem as $key01 => $origem) {
+            foreach ($this->countor as $key02 => $fichaor) {
+                if ($origem['id']==$fichaor['idorigem']) {
+                    $array_data_label[]=  array( "descricao" =>  $origem['descricao'], "qtde" =>$fichaor['qtde'] );
+                    $i = $i +1;
+                    $total = $total + $fichaor['qtde'];
+                }
+            }
+        }
+    ?>
+    <div class="table-responsive container">
+    	<fieldset>
+	    	<legend>Tabela de atendimento por origem</legend>
+	    	<table class="table table-striped">
+	    		<thead>
+				    <tr>
+					    <th>Descrição</th>
+					    <th>Atendimentos</th>
+					    <th>Representação %</th>
+				    </tr>
+			  	</thead>
+			  	<tbody>
+				<?php 
+				foreach ($array_data_label as $key => $value) {
+					echo "<tr><td class='desc'>";
+					echo  $value['descricao'];
+			        echo "</td>";
+			        echo "<td class='qtde'>";
+				  	echo  $value['qtde'];
+		            echo "</td>";
+		            echo "<td class='percent'>";
+				  	echo  number_format(($value['qtde']/$total)*100,2) . "%";
+		            echo "</td>";
+			        echo "</td> </tr>";
+				}
+				?>
+			  	</tbody>
+	    	</table>
+    	</fieldset>
+    </div>
+</body>
+</html>

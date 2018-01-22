@@ -1,0 +1,272 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	    <title>Ocorrência por idade</title>
+	    <script src="<?php echo $this->baseUrl() . '/Chart.js/Chart.js';?>"></script>
+	    <script src="<?php echo $this->baseUrl() . '/Chart.js/samples/utils.js';?>"></script>
+	    <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+	    <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+	   	<?php
+	        error_reporting(E_NOTICE);
+	        ini_set('display_errors', 0 );
+	        date_default_timezone_set('America/Sao_Paulo');
+	    ?>
+	</head>
+	<body>
+		<div class="container-fixed">
+            <nav class="navbar navbar-inverse navbar-static-top">
+                 <div class="navbar-header">
+                    <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+                </div>
+            </nav>
+        </div>
+		<?php 
+			foreach ($this->periodo as $key => $valuerange) {
+				$range01 = $valuerange['range01'];
+				$range02 = $valuerange['range02'];
+			}
+		?>
+		<?php 
+			$de0a2 = 0;
+			$de3a6 = 0;
+			$de7a10 = 0;
+			$de11a14 = 0;
+			$de15a17 = 0;
+			$de18a44 = 0;
+			$de45a59 = 0;
+			$de60a64 = 0;
+			$de65a69 = 0;
+			$maisde70= 0;
+			$totalidades = 0;
+			foreach ($this->dadosficha as $key => $valuedata) {
+				$totalidades += 1;
+				if ($valuedata['idade'] <= 2) {
+					$de0a2 += 1;
+				}elseif (($valuedata['idade'] > 2) && ($valuedata['idade'] <= 6)){
+					$de3a6 += 1;
+				}elseif (($valuedata['idade'] > 6) && ($valuedata['idade'] <= 10)){
+					$de7a10 += 1;
+				}elseif (($valuedata['idade'] > 10) && ($valuedata['idade'] <= 14)){
+					$de11a14 += 1;
+				}elseif (($valuedata['idade'] > 14) && ($valuedata['idade'] <= 17)){
+					$de15a17 += 1;
+				}elseif (($valuedata['idade'] > 17) && ($valuedata['idade'] <= 44)){
+					$de18a44 += 1;
+				}elseif (($valuedata['idade'] > 44) && ($valuedata['idade'] <= 59)) {
+					$de45a59 += 1;
+				}elseif (($valuedata['idade'] > 59) && ($valuedata['idade'] <= 64)) {
+					$de60a64 += 1;
+				}elseif (($valuedata['idade'] > 64) && ($valuedata['idade'] <= 69)) {
+					$de65a69 += 1;
+				}elseif ($valuedata['idade'] > 70) {
+					$maisde70 += 1;
+				}				
+			}
+		?>
+		<!--  http://www.chartjs.org/docs/latest/ !-->
+		<div style="width:90%;"><canvas id="myChart02" ></canvas></div>
+		<script>
+		var ctx = document.getElementById("myChart02").getContext('2d');
+		var myChart = new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+		        labels: ["0 a 2 [<?php echo $de0a2;?>]","3 a 6 [<?php echo $de3a6;?>]","7 a 10 [<?php echo $de7a10;?>]","11 a 14 [<?php echo $de11a14;?>]","15 a 17 [<?php echo $de15a17;?>]","18 a 44 [<?php echo $de18a44;?>]", "45 a 59 [<?php echo $de45a59;?>]", "60 a 64 [<?php echo $de60a64;?>]", "65 a 69 [<?php echo $de65a69;?>]", "70 ou + [<?php echo $maisde70;?>]"],
+		        datasets: [{
+		            label:"Dados",
+					data: [<?php echo number_format(($de0a2/$totalidades) * 100,2);?>,<?php echo number_format(($de3a6/$totalidades) * 100,2);?>,<?php echo number_format(($de7a10/$totalidades) * 100,2);?>,<?php echo number_format(($de11a14/$totalidades) * 100,2);?>,<?php echo number_format(($de15a17/$totalidades) * 100,2);?>,<?php echo number_format(($de18a44/$totalidades) * 100,2);?>,<?php echo number_format(($de45a59/$totalidades) *100,2);?>,<?php echo number_format(($de60a64/$totalidades) * 100,2); ?>,<?php echo number_format(($de65a69/$totalidades) * 100,2); ?>,<?php echo number_format(($maisde70/$totalidades) * 100,2); ?>],
+		            backgroundColor: [
+		                'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(215, 255, 0, 1)',
+                        'rgba(125, 125, 125, 1)',
+                        'rgba(218, 125, 125, 1)',
+                        'rgba(158, 158, 158, 1)'
+		            ],
+		            borderColor: [
+		                'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+		                'rgba(255, 159, 64, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(215, 255, 0, 1)',
+                        'rgba(158, 158, 158, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		    	title: {
+		            display: true,
+		            text:"Ocorrências por faixa etária no período de: " + "<?php  echo $range01;  ?>"+ " a " + " <?php  echo $range02;  ?>"
+		        },
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true,
+		                    steps: 5,
+		                    stepSize: 5,
+		                    max: 100
+		                }
+		            }]
+		        }
+		    }
+		});
+		</script>
+		<div style="width:90%;"><canvas id="myChart01" ></canvas></div>
+		<script>
+		// var ctx = document.getElementById("myChart01").getContext('2d');
+		// var myChart = new Chart(ctx, {
+		//     type: 'line',
+		//     data: {
+		//         labels: ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],
+		//         datasets: [{
+		//             label: "0 á 1 ano",
+		//             fill: false,
+		//             data: [12,60,30,21,11],
+		//             backgroundColor:["rgba(96, 96, 96, 1.0)"],
+		//             borderColor: "rgba(96, 96, 96, 1.0)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "2 á 6 anos",
+		//             fill: false,
+		//             data: [30,20,30, 34, 75],
+		//             opacity:1,
+		//             backgroundColor: "rgba(255,153,0,1)",
+		//             borderColor:"rgba(255,153,0,1)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "7 á 12 anos",
+		//             fill: false,
+		//             data: [45,55,22, 34, 80],
+		//             opacity:1,
+		//             backgroundColor: "rgba(69, 7, 59, 1)",
+		//             borderColor:"rgba(69, 7, 59, 1)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "13 á 17 anos",
+		//             fill: false,
+		//             data: [80,70,60, 50, 78],
+		//             opacity:1,
+		//             backgroundColor: "rgba(17, 9, 89, 1)",
+		//             borderColor: "rgba(17, 9, 89, 1)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "18 á 26 anos",
+		//             fill: false,
+		//             data: [85,76,85, 95, 90],
+		//             opacity:1,
+		//             backgroundColor: "rgba(0, 16, 7, 1)",
+		//             borderColor:"rgba(0, 16, 7, 1)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "27 á 40 anos",
+		//             fill: false,
+		//             data: [92,97,88, 89, 93],
+		//             opacity:1,
+		//             backgroundColor: "rgba(178, 16, 7, 1)",
+		//             borderColor:"rgba(178, 16, 7, 1)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "41 á 60 anos",
+		//             fill: false,
+		//             data: [88,78,85, 82, 89],
+		//             opacity:1,
+		//             backgroundColor: " rgba(19, 96, 138, 1)",
+		//             borderColor:" rgba(19, 96, 138, 1)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "61 ou +",
+		//             fill: false,
+		//             data: [77,71,65, 69, 71],
+		//             opacity:1,
+		//             backgroundColor: " rgba(103, 166, 38, 1)",
+		//             borderColor:" rgba(103, 166, 38, 1)",
+		//             borderWidth: 3
+		//         },
+		//         {
+		//             label: "70 anos ou mais",
+		//             fill: false,
+		//             data: [56,51,22, 48, 42,40,40,40,60],
+		//             opacity:1,
+		//             backgroundColor: "rgba(255, 83, 3, 1)",
+		//             borderColor: "rgba(255, 83, 3, 1)",
+		//             borderWidth: 3
+		//         }]
+		//     },
+		//     options: {
+		//     	responsive: true,
+		//         title: {
+		//             display: true,
+		//             text: 'Dados de ocorrências por faixa etária no ano de ' + <?php echo date("Y"); ?> +' (0% a 100%)'
+		//         },
+		//         scales: {
+		//             xAxes: [{
+
+		//             }],
+		//             yAxes: [{
+		//                gridLines: {
+		//                     lineWidth: 2
+		//                 },
+		//                 ticks: {
+		//                     beginAtZero:true,
+		//                     steps: 10,
+		//                     stepSize: 10,
+		//                     max: 100
+		//                 }
+		//             }]
+		//         }
+		//     }
+		// });
+		</script>
+		 <script>
+        // Define a plugin to provide data labels
+        Chart.plugins.register({
+            afterDatasetsDraw: function(chart, easing) {
+                // To only draw at the end of animation, check for easing === 1
+                var ctx = chart.ctx;
+                chart.data.datasets.forEach(function (dataset, i) {
+                    var meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach(function(element, index) {
+                            // Draw the text in black, with the specified font
+                            ctx.fillStyle = 'rgb(0, 0, 0)';
+
+                            var fontSize = 16;
+                            var fontStyle = 'normal';
+                            var fontFamily = 'Helvetica Neue';
+                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+                            // Just naively convert to string for now
+                            var dataString = dataset.data[index].toString();
+
+                            // Make sure alignment settings are correct
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+
+                            var padding = 5;
+                            var position = element.tooltipPosition();
+                            ctx.fillText(dataString + " %", position.x, position.y - (fontSize / 2) - padding);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+
+	</body>
+</html>

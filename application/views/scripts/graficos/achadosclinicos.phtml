@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<title>Tabela tempo de resposta</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta charset="utf-8">
+        <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+        <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+        <link href="<?php echo $this->baseUrl() . '/css/table.css'; ?>" rel="stylesheet" type="text/css" />
+        <?php
+            error_reporting(E_NOTICE);
+            ini_set('display_errors', 0);
+            date_default_timezone_set('America/Sao_Paulo');
+        ?>
+    </head>
+</head>
+<body>
+	<div class="container-fixed">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+            </div>
+        </nav>
+    </div>
+    <?php 
+        foreach ($this->periodo as $key => $valuerange) {
+            $range01 = $valuerange['range01'];
+            $range02 = $valuerange['range02'];
+        }
+    ?>
+    <?php 
+        $data ='';
+    	foreach ($this->dadosficha as $key => $value) {
+    		if (strlen(trim($value['achado']))>2) {
+    			$data = trim($value['achado'].$data);
+    		}   		
+    	}
+    	$var = explode(",",$data);
+    	foreach($var as $key => $numero) {
+    		$filtered[]=trim($numero);
+		}
+		$countarray = array_count_values($filtered);
+        $total = 0;
+		foreach ($countarray as $key => $value) {
+            if (strlen($key)>=3) {
+              $total +=$value;
+            }
+		}
+     ?>
+	<div class="table-responsive container">
+		<fieldset>
+			<legend>Tabela tempo de resposta ( <?php echo $range01; ?> até <?php echo $range02; ?>)</legend>
+		<table class="table table-hover">
+		  <thead>
+		    <tr> 
+		    	<th>Descricao</th>
+		    	<th>Qtde ocorrências</th>
+		    	<th>( % ) referente</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <?php 
+                foreach ($countarray as $key => $value) {
+                    if (strlen($key)>=3) {
+                        echo "<tr><td class='desc'>";
+                        echo  strtoupper($key);
+                        echo "</td>";
+                        echo "<td class='qtde'>";
+                        echo  $value;
+                        echo "</td>";
+                        echo "<td class='percent'>";
+                        echo  number_format(($value/$total)*100,3) . "%";
+                        echo "</td>";
+                        echo "</td> </tr>";
+                    }
+                }
+            ?>
+		  </tbody>
+		</table>
+		( * ) 
+		</fieldset>
+	</div>
+</body>
+</html>

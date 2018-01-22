@@ -1,0 +1,3 @@
+Projeto executado em Zend Framework
+Base de dados na raiz (samu_aph.sql)
+wamp server 64

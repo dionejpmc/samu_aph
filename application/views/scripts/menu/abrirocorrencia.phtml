@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="<?php echo $this->baseUrl() . '/js/moment.js';?>"></script>
+    <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $this->baseUrl() . '/css/abrirocorrencia.css'; ?>" rel="stylesheet" type="text/css" />
+    <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+    <script src="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/js/bootstrap.js'; ?>"></script>
+    <link rel="stylesheet" href="<?php echo $this->baseUrl() . '/css/font-awesome.min.css'; ?>">
+    <link href= "<?php echo $this->baseUrl() .'/datetimepicker/bootstrap/css/bootstrap.min.css' ;?>"rel="stylesheet" media="screen">
+    <link href="<?php echo $this->baseUrl() .'/datetimepicker/css/bootstrap-datetimepicker.min.css'; ?>" rel="stylesheet" media="screen">
+    <script src="<?php echo $this->baseUrl() . '/datetimepicker/js/bootstrap-datetimepicker.js';?>"></script>
+    <script src="<?php echo $this->baseUrl() . '/datetimepicker/js/locales/bootstrap-datetimepicker.pt-BR.js'; ?>"></script>
+    <link href="<?php echo $this->baseUrl() .'/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css'; ?>" rel="stylesheet" media="screen">
+    <script src="<?php echo $this->baseUrl() . '/bootstrap-datetimepicker-0.0.11/js/bootstrap-datetimepicker.min.js';?>">
+    </script>
+    <?php
+        error_reporting(E_NOTICE);
+        ini_set('display_errors', 0 );
+    ?>
+    <title>Abrir ocorrência</title>
+</head>
+    <body>
+        <?php if ($_GET['msg'] != "" || $_GET['msg'] != '') { ?>
+            <div class="alert alert-success alert-dismissable" id="successMessage">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Mensagem!</strong> <?php echo $_GET['msg']; ?>
+            </div>
+        <?php  } ?>
+        <?php if ($_GET['erro'] == 'true') { ?>
+            <div class="alert alert-warning alert-dismissable" id="warningMessage">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Mensagem!</strong> <?php echo $_GET['msg']; ?>
+            </div>
+        <?php  } ?>
+        <div>
+            <script type="text/javascript">
+                $('#successMessage').delay(5000).fadeOut('slow');
+            </script>
+            <script type="text/javascript">
+                $('#warningMessage').delay(5000).fadeOut('slow');
+            </script>
+            <div class="container-fixed">
+              <nav class="navbar-inverse">
+                <div class="container">
+                  <div class="navbar-header">
+                    <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+                    <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/fichaaph/consultarfichaaph';?>">Consultar</a>
+                  </div>
+                </div>
+              </nav>
+            </div>
+        </div>
+        <div class="container cn01">  
+            <style type="text/css">
+                /* Adjust feedback icon position */
+                #movieForm .form-control-feedback {
+                    right: 15px;
+                }
+                #movieForm .selectContainer .form-control-feedback {
+                    right: 25px;
+                }
+            </style>
+            <form id="movieForm" action="" method="post">
+               <legend>FICHA APH</legend>
+               <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-4 codigodiv">
+                            <label class="control-label">Código</label>
+                            <div class="input-group " type="text">
+                                <input onkeyup="somenteNumeros(this);" required type="text" class="form-control codigo" id="codigo" name="codigo" />
+                            </div>
+                            <label id="resposta" class="control-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div>
+                            <div  class="col-xs-12">
+                                <label for="dtp_input2" class="control-label">Data</label>
+                                <div id="data01" class="input-group date form_date col-xs-3" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input2" data-link-format="yyyy/mm/dd">
+                                    <input  required class="form-control" size="8" type="text" value="" >
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                </div>
+                                <input  type="hidden" name="data" id="dtp_input2" value="" />
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="control-label">Hora saída</label>
+                                <div class="input-group date form_time" data-date="" data-date-format=" yyyy/mm/dd hh:ii:ss" data-link-field="dtp_input3" data-link-format="yyyy/mm/dd hh:ii:ss">
+                                   <input required type="text" class="form-control h01" name="title"  />
+                                   <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                   <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                </div>
+                                <input class="h01" type="hidden" name="hsaida" id="dtp_input3" value="" /><br/>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="control-label">Hora chegada local</label>
+                                <div class="input-group date form_time" data-date="" data-date-format="yyyy/mm/dd hh:ii:ss" data-link-field="dtp_input4" data-link-format="yyyy/mm/dd hh:ii:ss">
+                                    <input  required type="text" class="form-control h02" name="title"  />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                </div>
+                                <input class="h02" type="hidden" name="hchegadalocal" id="dtp_input4" value="" /><br/>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="control-label">Hora saída local</label>
+                                <div class="input-group date form_time" data-date="" data-date-format="yyyy/mm/dd hh:ii:ss" data-link-field="dtp_input5" data-link-format="yyyy/mm/dd hh:ii:ss">
+                                    <input  required type="text" class="form-control h03" name="title"  />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                </div>
+                                <input class="h03" type="hidden" name="hsaidalocal" id="dtp_input5" value="" /><br/>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="control-label">Hora chegada destino</label>
+                                <div class="input-group date form_time" data-date="" data-date-format="yyyy/mm/dd hh:ii:ss" data-link-field="dtp_input6" data-link-format="yyyy/mm/dd hh:ii:ss">
+                                    <input required type="text" class="form-control h05" name="title"  />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                </div>
+                                <input class="h05" type="hidden" name="hchegada" id="dtp_input6" value="" /><br/>
+                            </div>
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Transferência / Origem</label>
+                                <select required class="form-control" name="origem">
+                                    <option value=""></option>
+                                    <?php foreach ($this->origemdestino as $key => $value) { ?>
+                                    <option value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Destino</label>
+                                <select required class="form-control" name="destino">
+                                    <option value=""></option>
+                                    <?php foreach ($this->origemdestino as $key => $value) { ?>
+                                    <option value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Viatura</label>
+                                <select required class="form-control " name="viatura">
+                                    <option value=""></option>
+                                    <?php foreach ($this->viaturas as $key => $value) { ?>
+                                    <option value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-2 selectContainer">
+                                <label class="control-label">Sexo</label>
+                                <select id="sexo" required class="form-control" name="sexo">
+                                    <option value=""></option>
+                                    <option value="FEMININO">FEMININO</option>
+                                    <option value="MASCULINO">MASCULINO</option>
+                                </select>
+                            </div>           
+                             <div class="col-xs-1 selectContainer">
+                                <label class="control-label">Idade</label>
+                                <input required onkeyup="somenteNumeros(this);" maxlength="3" class="form-control" id="idade" name="idade">
+                                
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Bairro</label>
+                                <datalist  id="dlbairro" class="brand-id">
+                                    <select  name="slbairro" id="slbairro" class="form-control selectpicker brand-id">
+                                        <option value=""></option>
+                                        <?php foreach ($this->bairro as $key => $value): ?>
+                                        <option value="<?php echo ($value['descricao']); ?>" ><?php echo ($value['descricao']); ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </datalist>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                    <input  style="text-transform:uppercase;" class="form-control" type="text" name="bairro" list="dlbairro">
+                                </div>
+                            </div>            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-3 selectContainer">
+                                <label class="control-label">Tipo Ocorrência</label>
+                                <select required class="form-control tipoocorrencia" name="tipo">
+                                    <option value=""></option>
+                                    <?php foreach ($this->datatipoocorrencia as $key => $value) { ?>
+                                    <option class="optipo"  value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option>
+                                    <?php  } ?> 
+                                </select>
+                            </div>            
+                        </div>
+                    </div>
+                    <div class="el_natureza">
+                        <?php //Elementos criados dinamicamente via JQuery ?>  
+                    </div>
+                </div>
+                <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Achados</label>
+                                <datalist id="dlachados">
+                                    <option value=""></option>
+                                    <?php foreach ($this->achado as $key => $value): ?>
+                                    <option  id="<?php echo ($value['id']); ?>" value="<?php echo ($value['descricao']); ?>" ><?php echo ($value['descricao']); ?></option>
+                                    <?php endforeach ?>
+                                </datalist>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                                    <input style="text-transform:uppercase;" class="form-control" type="text" id="idinpachados" name="inpachados" list="dlachados">
+                                    <input style="display:none;" type="text">
+                                   
+                                     <div class="input-group-btn">
+                                        <span class="btn btn-success btn-add ach">+</span>
+                                    </div>
+                                     <div class="input-group-btn">
+                                        <span class="btn btn-danger btn-rm ach">-</span>
+                                    </div>
+                                </div>
+                            </div>   
+                        </div>
+                </div>
+                <div class="form-group achadoprincipal">
+                    <label class="control-label">Achado principal</label>
+                    <textarea readonly id="inputtextarea" required class="form-control achadoprincipal" style="text-transform:uppercase;" name="achado"></textarea>
+                </div>
+                <div class="form-group colonisado">
+                    <li class="list-group-item control-label ">
+                        Paciente colonizado
+                        <div class="material-switch pull-right ">
+                            <input id="someSwitchOptionSuccess" name="colonizado" type="checkbox"/>
+                            <label for="someSwitchOptionSuccess" class="label-success control-label"></label>
+                        </div>
+                    </li>
+                </div>
+                <div class=" form-group ">
+                    <label class="control-label">Óbito</label>
+                    <div>
+                        <label class="radio-inline rbtn">
+                            <input  required type="radio" class="rbtn " name="rating" value="0" /> Sim
+                        </label>
+                        <label class="radio-inline rbtn">
+                            <input required type="radio" class="rbtn" name="rating" value="1" /> Não
+                        </label>
+                        <fieldset class="rbtnop">
+                            <?php //Elementos criados dinamicamente via JQuery ?>                           
+                        </fieldset>
+                    </div>
+                </div><br>
+                <button type="submit" class="btn btn-primary">Salvar<span class="glyphicon glyphicon-send"></span></button>
+            </form>
+            <script type="text/javascript">
+
+               $('.form_date').datetimepicker({
+                    language:  'pt-BR',
+                    weekStart: 1,
+                    todayBtn:  1,
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 2,
+                    minView: 2,
+                    forceParse: 0
+                });
+                $('.form_time').datetimepicker({
+                    language:  'pt-BR',
+                    weekStart: 1,
+                    todayBtn:  1,
+                   // initialDate: new Date( ),
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 1,
+                    minView: 0,
+                    maxView: 1,
+                    forceParse: 0
+                });
+            </script>
+            <script type="text/javascript">
+            $(".rbtn").change(function(){ // bind a function to the change event
+                if( $(this).is(":checked") ){ // check if the radio is checked
+                    var val = $(this).val(); // retrieve the value
+                    if (val == 0) {
+                       $(".rbtnop").append('<label class="element">Se sim :</label> <br  class="element"/> <label class="element radio-inline"><input required class="element" type="radio" id="rbtn2" name="ratingop" value="2"/> No local </label><label class="element radio-inline"><input required class="element" type="radio" id="rbtn3" name="ratingop" value="3" /> No transporte</label>');
+                       $(".rbtnop").show();
+                    };   
+                    if (val == 1) {
+                       $( ".element" ).remove();
+                    };
+                }
+            });
+            </script>
+            <script type="text/javascript">
+            $(document).ready(function(){
+                $(".tipoocorrencia").blur(function(){
+                     var tipo = $(".tipoocorrencia option:selected").val();
+                     if (tipo == '1') {
+                        $( ".el_natureza" ).empty();
+                        $(".el_natureza").append('<div class="form-group"><div class="row"><div class="col-xs-3 selectContainer"><label class="control-label">Natureza ocorrência</label><select autocomplete="off" required class="form-control" name="natureza"><option value=""></option>  <?php foreach ($this->natureza01 as $key => $value) {?><option autocomplete="off" value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option><?php } ?></select></div></div> </div>');
+                        $(".el_natureza").show();
+                     }else if (tipo == '2') {
+                         $( ".el_natureza" ).empty();
+                         $(".el_natureza").append('<div class="form-group"><div class="row"><div class="col-xs-3 selectContainer"><label class="control-label">Natureza ocorrência</label><select autocomplete="off" required  class="form-control" name="natureza"><option value=""></option>  <?php foreach ($this->natureza02 as $key => $value) {?><option autocomplete="off" value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option><?php } ?></select></div></div> </div>');
+                         $(".el_natureza").show();
+                     }else{
+                         $( ".el_natureza" ).empty();
+                         $(".el_natureza").append('<div class="form-group"><div class="row"><div class="col-xs-3 selectContainer"><label class="control-label">Natureza ocorrência</label><select required autocomplete="off"  class="form-control" name="natureza"><option value=""></option>  <?php foreach ($this->natureza as $key => $value) {?><option autocomplete="off" value="<?php echo ($value['id']); ?>"><?php echo ($value['descricao']); ?></option><?php } ?></select></div></div> </div>');
+                         $(".el_natureza").show();
+                     }
+                });
+            });
+            </script>
+            <script type="text/javascript">
+                $(document).on("click", ".btn-add", function(){
+                    var input = document.getElementById('idinpachados').value;
+                    if (input != "") {
+                        $('#inputtextarea').append(input+",");
+                    }else{
+                        alert("Campo vazio!");
+                    }
+                    $('#idinpachados').append("");
+                    document.getElementById("idinpachados").value = "";
+                });
+                $(document).on("click", ".btn-rm", function(){
+                     $("#inputtextarea").empty();
+                });
+         </script>
+         <script type="text/javascript">
+          $("#someSwitchOptionSuccess").change(function(){
+             if( $(this).is(":checked") ){
+                alert("Colonizado!");
+                $(this).val(1);
+                $(this).value = 1;
+             }
+             else{
+                $(this).val(0);
+                $(this).value = 0;
+                alert("Não Colonizado!");
+             }
+          });
+         $(".h01").change(function(){
+            $(".h02").val($(".h01").val());
+            $(".h03").val($(".h01").val());
+            $(".h04").val($(".h01").val());
+            $(".h05").val($(".h01").val());
+            
+          });
+         $(".h02").change(function(){
+            if(!moment($(".h02").val()).isAfter($(".h01").val())){
+                alert("Atenção as datas, a hora de chegada deve ser maior que a hora de saída da base!");
+                $(".h02").val($(".h01").val());
+            }
+          });
+         $(".h03").change(function(){
+            if(!moment($(".h03").val()).isAfter($(".h01").val())){
+                alert("Atenção as datas, a hora de saída do local deve ser maior que a hora de saída da base!");
+                $(".h03").val($(".h01").val());
+            }
+          });
+          $(".h05").change(function(){
+            if(!moment($(".h05").val()).isAfter($(".h01").val())){
+                alert("Atenção as datas, a hora de saída da base e chegada na base devem ser coerentes!");
+                $(".h05").val($(".h01").val());
+            }
+          });
+           $(".h05").change(function(){
+            if(!moment($(".h05").val()).isAfter($(".h02").val())){
+                alert("Atenção as datas, a hora de saída da base e chegada no local devem ser coerentes!");
+                $(".h05").val($(".h02").val());
+            }
+          });
+          $("#data01").change(function(){
+            $(".h01").val($("#dtp_input2").val()+' 00:01:01');
+            $(".h02").val($("#dtp_input2").val()+' 00:01:01');
+            $(".h03").val($("#dtp_input2").val()+' 00:01:01');
+            $(".h04").val($("#dtp_input2").val()+' 00:01:01');
+            $(".h05").val($("#dtp_input2").val()+' 00:01:01');
+          });
+         </script>
+        <script>
+            function somenteNumeros(num) {
+                var er = /[^0-9.]/;
+                er.lastIndex = 0;
+                var campo = num;
+                if (er.test(campo.value)) {
+                    campo.value = "";
+                    alert("Digite apenas números!");
+                }
+            }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script language="javascript">
+            var codigo = $("#codigo"); 
+                codigo.change(function() {                     
+                    $.ajax({ 
+                        url: '<?php echo $this->baseUrl(); ?>/verificacodigo.php', 
+                        type: 'GET', 
+                        data:{"codigo" : codigo.val()}, 
+                        success: function(data){ 
+                            console.log(data); 
+                            data = $.parseJSON(data); 
+                            $("#resposta").text(data.codigo);
+                            if (data.codigo == 'Este código já está cadastrado!') 
+                              $( ".codigodiv" ).addClass( "has-error" );  
+                            else
+                              $( ".codigodiv" ).removeClass( "has-error").addClass( " has-success" );
+                        }    
+                    }); 
+            }); 
+        </script>
+        <script type="text/javascript">
+        jQuery(document).ready(function(){
+            jQuery('#movieForm').submit(function(){
+                var dados = jQuery(this).serialize();
+                jQuery.ajax({
+                    type: "POST",
+                    url: "<?php echo $this->url(array(controller => fichaaph, action => salvarfichaaph), null, true); ?>",
+                    data: dados,
+                    cache: false, //Se não colocar isso e der erro, ele fica com a msg de erro na cache
+                    async: true,
+                    error: function( data ) 
+                    {
+                        alert('Erro ao salvar dados!');
+                        alert(dados);
+                        console.log(dados);
+                    },
+                    success: function( data )
+                    {
+                        alert('Dados salvos!');
+                        $('#movieForm').each (function(){
+                          this.reset();
+                        });
+                        $('#inputtextarea').empty();
+                        
+                    }
+                });
+                return false;
+            });
+        });
+        </script>
+        </div>
+    </body>
+</html>
+
+ 
+              

@@ -1,0 +1,156 @@
+<html>
+    <head>
+        <title>Ocorrências por natureza</title>
+            <meta charset="utf-8">
+            <title>Ocorrência por natureza</title>
+            <script src="<?php echo $this->baseUrl() . '/Chart.js/Chart.js';?>"></script>
+            <script src="<?php echo $this->baseUrl() . '/Chart.js/samples/utils.js';?>"></script>
+            <script src="<?php echo $this->baseUrl() . '/js/jquery-1.11.0.min.js';?>"></script>
+            <link href="<?php echo $this->baseUrl() . '/bootstrap-3.2.0/css/bootstrap.css'; ?>" rel="stylesheet" type="text/css" />
+            <?php
+                error_reporting(E_NOTICE);
+                ini_set('display_errors', 0 );
+                date_default_timezone_set('America/Sao_Paulo');
+            ?>
+    </head>
+<body>
+    <?php 
+        foreach ($this->periodo as $key => $valuerange) {
+            $range01 = $valuerange['range01'];
+            $range02 = $valuerange['range02'];
+        }
+    ?>
+    <?php 
+        $i = 0;
+        $total = 0;
+        $clinica= 0;
+        $traumatica= 0;
+        $outras= 0;
+        foreach ($this->counttipo as $key => $value) {
+        	if (($value['descricao'] == 'CLINICA') || ($value['descricao'] == 'CLÍNICA') ) {
+        		$clinica+=1;  
+        		$total+=1;      		
+        	}else if (($value['descricao'] == 'TRAUMÁTICA') || ($value['descricao'] == 'TRAUMATICA')) {
+        		$traumatica+=1;
+        		$total+=1;
+        	}else{
+        		$outras+=1;
+        		$total+=1;
+        	}
+        }
+    ?>
+    <div class="container-fixed">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" <a href="<?php echo $this->baseUrl() .'/menu';?>">Menu</a>
+            </div>
+        </nav>
+    </div>
+      <div class="container" style="width:80%;"><canvas id="myChart" ></canvas></div>
+        <script>
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Total de dados contabilizados : [  " + <?php echo $total; ?> + "  ]"],
+                datasets: [{
+                    label: "CLÍNICA: " + <?php echo $clinica;  ?>+" ",
+                    data: [<?php echo number_format( (($clinica / $total ) * 100),2); ?>],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: "TRAUMÁTICA: " + <?php echo $traumatica;  ?>+" ",
+                    data: [<?php echo  number_format( (($traumatica / $total ) * 100),2); ?>],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+
+                 }]
+                // {
+                //     label: "OUTRAS: " + <?php echo $outras;  ?>+" ",
+                //     data: [<?php echo  number_format( (($outras / $total ) * 100),2); ?>],
+                //     backgroundColor: [
+                //          'rgba(153, 102, 255, 0.8)',
+                //          'rgba(153, 102, 255, 0.8)',
+                //          'rgba(153, 102, 255, 0.8)'
+                //     ],
+                //     borderColor: [
+                //          'rgba(153, 102, 255, 0.8)',
+                //          'rgba(153, 102, 255, 0.8)',
+                //          'rgba(153, 102, 255, 0.8)'
+                //     ],
+                //     borderWidth: 1
+                // }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Dados de ocorrências por tipo (0% a 100%)'
+                },
+                scales: {
+                    xAxes: [{                       
+                    }],
+                    yAxes: [{
+                       gridLines: {
+                            lineWidth: 2
+                        },
+                        ticks: {
+                            beginAtZero:true,
+                            steps: 10,
+                            max: 100
+                        }
+                    }]
+                }
+            }
+        });
+        </script>
+         <script>
+        // Define a plugin to provide data labels
+        Chart.plugins.register({
+            afterDatasetsDraw: function(chart, easing) {
+                // To only draw at the end of animation, check for easing === 1
+                var ctx = chart.ctx;
+                chart.data.datasets.forEach(function (dataset, i) {
+                    var meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach(function(element, index) {
+                            // Draw the text in black, with the specified font
+                            ctx.fillStyle = 'rgb(0, 0, 0)';
+                            var fontSize = 16;
+                            var fontStyle = 'normal';
+                            var fontFamily = 'Helvetica Neue';
+                            ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+                            // Just naively convert to string for now
+                            var dataString = dataset.data[index].toString();
+                            // Make sure alignment settings are correct
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            var padding = 5;
+                            var position = element.tooltipPosition();
+                            ctx.fillText(dataString + " %", position.x, position.y - (fontSize / 2) - padding);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
